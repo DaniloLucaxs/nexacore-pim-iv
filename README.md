@@ -2,7 +2,15 @@
 
 Evolução do PIM III para gestão de pessoas com .NET 8, EF Core, SQL Server e HTML/CSS/JavaScript. Mantém entidades, namespaces, migrations originais e identidade visual recebida. Não há integração externa de IA nesta fase.
 
-## Começar com Docker (Windows, Linux ou macOS x64)
+## Começar no Windows com SQL Server instalado
+
+**Para os integrantes do grupo:** siga o [guia de execução local no Windows](docs/execucao-local-windows.md). Ele apresenta o caminho validado por Danilo, com C#/.NET 8 e SQL Server local, **sem Python ou Docker**, comandos separados para CMD e PowerShell, configuração da sua própria instância e soluções para os erros encontrados.
+
+O SDK versionado é 8.0.426; o guia explica também a seleção local do 8.0.132 usada na máquina de Danilo. O backend cria as tabelas e os objetos SQL pelas migrations; API e frontend são iniciados juntos com `dotnet run`.
+
+A próxima fase está descrita no [plano de implementação do NexaCore AI](docs/plano-ia.md). A IA ainda não está implementada e não é necessária para executar o MVP.
+
+## Alternativa com Docker (Windows, Linux ou macOS x64)
 
 Requisitos: SDK **.NET 8.0.426** (global.json), Python 3.10+, Docker com suporte a containers Linux e pelo menos 4 GB disponíveis para o SQL Server. No Windows, Docker Desktop/WSL2. Node.js 22+ é necessário somente para testes de navegador. Não é necessário SQL Server pago, hospedagem ou domínio.
 
@@ -28,15 +36,9 @@ Ctrl+C encerra a API. O banco permanece no Docker para preservar dados. `docker 
 
 ## SQL Server/Express instalado no Windows
 
-Instale .NET 8.0.426 e SQL Server/Express; SSMS é opcional. Use uma base de desenvolvimento e uma conta com permissões para criar a base e aplicar migrations (incluindo procedure, trigger e view). Exemplo PowerShell, adaptando a instância:
+Consulte o [guia completo com CMD e PowerShell](docs/execucao-local-windows.md). A execução principal é diretamente pelo .NET: defina a connection string da sua instância SQL, habilite o seed fictício se necessário e inicie `dotnet run --no-launch-profile --project .\backend\PIM3SemBackend --urls http://127.0.0.1:5080`.
 
-```powershell
-$env:ConnectionStrings__DefaultConnection = 'Server=localhost\SQLEXPRESS;Database=NexaCore;Integrated Security=true;Encrypt=true;TrustServerCertificate=true'
-$env:Demo__Password = Read-Host "Senha fictícia para o seed"
-python scripts/dev.py --seed
-```
-
-Sem `--docker`, o script usa a connection string do terminal. `TrustServerCertificate=true` é apenas para o certificado local de desenvolvimento; não desativa TLS no download de dependências. Um SQL Server remoto exige configuração própria de certificado, credenciais e rede; não foi validado nesta entrega.
+Python é somente um auxiliar opcional dos scripts de Docker/testes. Cada integrante pode executar o sistema com .NET e SQL Server instalados. Um SQL Server remoto exige configuração própria de certificado, credenciais e rede; não foi validado nesta entrega.
 
 ## Migrations, objetos SQL e dados
 
@@ -55,7 +57,7 @@ dotnet test backend/PIM3SemBackend.sln --no-build
 python scripts/test.py
 ```
 
-`dotnet test` isolado executa os testes unitários e declara os testes SQL ignorados quando faltam as variáveis da API de teste. **`python scripts/test.py` executa todos**, iniciando uma API na porta 5081 com banco `NexaCoreTests_<id>` e seed próprios, sem usar os registros da demonstração. O banco de testes é retido para diagnóstico; nenhuma base é apagada automaticamente. Resultado TRX e logs ficam em `.local/`.
+`dotnet test` isolado executa os testes unitários e declara os testes SQL ignorados quando faltam as variáveis da API de teste. **`python scripts/test.py` exige Python e Docker e executa todos os testes**, iniciando uma API na porta 5081 com banco `NexaCoreTests_<id>` e seed próprios, sem usar os registros da demonstração. O banco de testes é retido para diagnóstico; nenhuma base é apagada automaticamente. Resultado TRX e logs ficam em `.local/`.
 
 Para testar também o navegador:
 
@@ -69,7 +71,7 @@ python scripts/test.py --browser
 
 No ambiente de nuvem já preparado, o runner usa `/usr/bin/chromium`. Em outras máquinas usa o Chromium instalado pelo Playwright; `CHROMIUM_PATH` permite informar um executável local. Suítes API e UI usam ciclos separados da API, preservando o limite de login e verificando a repetição do seed. Não há traces de autenticação gravados.
 
-Validação executada na nuvem Linux x64: restore com lockfiles, build, **22 testes .NET aprovados, sem skips**, e **2 testes de navegador aprovados** com SQL Server 2022 real. Inclui concorrência, rollback provocado depois da escrita do histórico, trigger multirregistro, autoria em conexões reutilizadas, permissões e fluxo visual completo. Layout verificado em 390/768/1440 px. Windows/SQL Express e dispositivos físicos não foram executados aqui.
+Validação executada na nuvem Linux x64: restore com lockfiles, build, **22 testes .NET aprovados, sem skips**, e **2 testes de navegador aprovados** com SQL Server 2022 real. Inclui concorrência, rollback provocado depois da escrita do histórico, trigger multirregistro, autoria em conexões reutilizadas, permissões e fluxo visual completo. Layout verificado em 390/768/1440 px. Danilo confirmou posteriormente a compilação sem avisos/erros, aplicação das cinco migrations e inicialização com SQL Server local no Windows; a suíte automatizada completa não foi repetida na máquina dele. Dispositivos físicos não foram testados aqui.
 
 ## Organização e colaboração
 
