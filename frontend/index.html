@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>NexaCore – gestão de funcionários para pequenas e médias empresas</title><meta name="description" content="Funcionários, salários, reajustes e histórico de alterações em um só sistema."><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="landing.css"><script src="brand.js"></script><script>document.documentElement.classList.add("js")</script></head>
+<body><div id="prog" aria-hidden="true"></div><a class="skip" href="#main">Ir para o conteúdo</a>
+<header class="top" id="top"><div class="bar"><a class="nm" href="index.html"><img class="mark" data-logo="mark" alt="">NexaCore</a>
+<nav aria-label="Principal"><a href="#recursos">Recursos</a><a href="#perfis">Perfis de acesso</a><a class="btn" href="login.html">Entrar</a></nav></div></header>
+<main id="main">
+<section class="hero-bg" id="inicio"><div class="bgp" data-par=".18"></div><div class="wrap hero2"><div>
+<h1>Pessoas, salários e histórico em um só sistema.</h1>
+<p class="lead">O NexaCore reúne o cadastro de funcionários, os reajustes e o registro de cada alteração. Menos planilhas soltas, mais clareza para quem gerencia equipes.</p>
+<div class="cta"><a class="btn" href="login.html">Ver o sistema funcionando</a><a class="btn ghost" href="#recursos">Conhecer os recursos</a></div></div>
+<div class="sim-wrap"><section class="panel sim" aria-labelledby="sh"><h2 id="sh">Simule um reajuste</h2>
+<p class="hint">Valores de exemplo: 48 funcionários e folha mensal de R$ 328.300.</p>
+<label class="sr" for="p">Percentual de reajuste</label><input id="p" type="range" min="0" max="15" step="0.5" value="5">
+<div class="pct"><span>Percentual</span><b id="pv">5%</b></div>
+<dl class="mini" aria-live="polite"><div><dt>Impacto mensal</dt><dd id="imp"></dd></div><div><dt>Folha depois</dt><dd id="aft"></dd></div><div><dt>Afetados</dt><dd>48</dd></div></dl>
+<p class="hint">Simulação ilustrativa, sem gravação. No sistema, o gestor solicita e o RH decide o reajuste por colaborador.</p></section>
+<div class="badge"><b>Reajuste registrado</b><span>por Marina Duarte, com valor anterior</span></div></div></div></section>
+<section class="wrap strip rv"><dl class="ledger" id="stats">
+<div><dt>Funcionários</dt><dd><span data-to="48">48</span></dd></div>
+<div><dt>Departamentos</dt><dd><span data-to="4">4</span></dd></div>
+<div><dt>Perfis de acesso</dt><dd><span data-to="3">3</span></dd></div>
+<div><dt>Alterações com autor registrado</dt><dd><span data-to="100" data-sf="%">100%</span></dd></div></dl>
+<p class="hint" style="margin-top:8px">Valores ilustrativos desta página institucional; não são indicadores do banco.</p></section>
+<section class="sec" id="recursos"><div class="wrap"><h2 class="rv">O que o NexaCore resolve no dia a dia</h2>
+<div class="row rv"><h3>Cadastro e consulta</h3><p>Registre funcionários com departamento, cargo e gerente. Busque por nome ou cargo e filtre por departamento e perfil.</p></div>
+<div class="row rv"><h3>Reajustes com prévia</h3><p>Veja o impacto na folha antes de aplicar. Cada solicitação passa por análise do RH. A aprovação grava salário, histórico e auditoria em uma única transação.</p></div>
+<div class="row rv"><h3>Histórico e auditoria</h3><p>Cada alteração de salário, cargo ou acesso é registrada com quem fez e quando. O histórico salarial de cada pessoa fica à mão.</p></div>
+<div class="row rv"><h3>Painel gerencial</h3><p>Número de funcionários, folha por departamento e reajustes pendentes na primeira tela, sem montar planilha.</p></div>
+<div class="row rv"><h3>NexaCore AI<span class="soon">planejado para a fase 2</span></h3><p>Na próxima fase, será possível perguntar ao sistema, em linguagem comum, quantas pessoas trabalham em um departamento e receba a resposta com base nos dados cadastrados.</p></div></div></section>
+<section class="banner"><div class="bgp" data-par=".12"></div><div class="wrap"><p class="big rv">Cada alteração tem autor, data e valor anterior.</p><p class="sub rv">Quando alguém pergunta quem mudou um salário ou um cargo, a resposta está registrada, sem procurar em planilhas e e-mails.</p></div></section>
+<section class="sec" id="perfis"><div class="wrap"><h2 class="rv">Cada perfil vê o que precisa</h2>
+<div class="tabs rv"><div class="tl" role="tablist" aria-label="Perfis de acesso"><button role="tab" id="t1" data-k="ceo" aria-controls="pan">Administrador</button><button role="tab" id="t2" data-k="ger" aria-controls="pan">RH</button><button role="tab" id="t3" data-k="fun" aria-controls="pan">Gestor</button></div>
+<div class="tp" id="pan" role="tabpanel"></div></div></div></section>
+<section class="final"><div class="bgp" data-par=".1"></div><div class="wrap"><h2 class="rv">Veja o painel funcionando.</h2><a class="btn rv" href="login.html">Entrar na demonstração</a></div></section></main>
+<footer><div class="wrap"><div class="plate"><img data-logo="full" alt="NexaCore"></div><p>A NexaCore é uma empresa fictícia criada para o Projeto Integrado Multidisciplinar do curso de Análise e Desenvolvimento de Sistemas da UNIP.</p></div></footer>
+<script>
+const $=i=>document.getElementById(i),rm=matchMedia("(prefers-reduced-motion:reduce)").matches;
+const R=v=>v.toLocaleString("pt-BR",{style:"currency",currency:"BRL",maximumFractionDigits:0}),B=328300,s=$("p");
+function up(){const p=+s.value;$("pv").textContent=p.toLocaleString("pt-BR")+"%";$("imp").textContent=R(B*p/100);$("aft").textContent=R(B*(1+p/100))}
+s.oninput=up;up();
+const pars=[...document.querySelectorAll("[data-par]")];
+function sc(){const y=scrollY,h=document.documentElement.scrollHeight-innerHeight;$("top").classList.toggle("sc",y>40);$("prog").style.transform=`scaleX(${h>0?y/h:0})`;
+if(!rm)pars.forEach(p=>{const r=p.parentElement.getBoundingClientRect();p.style.transform=`translate3d(0,${-(r.top+r.height/2-innerHeight/2)*p.dataset.par}px,0)`})}
+let tk=0;addEventListener("scroll",()=>{tk||(tk=requestAnimationFrame(()=>{tk=0;sc()}))},{passive:true});sc();
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{threshold:.12});
+document.querySelectorAll(".rv").forEach((e,i)=>{e.style.setProperty("--d",(i%3)*.08+"s");io.observe(e)});
+const ln=[...document.querySelectorAll("nav a[href^='#']")];
+const so=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)ln.forEach(a=>a.toggleAttribute("aria-current",a.hash==="#"+e.target.id))}),{rootMargin:"-45% 0px -50% 0px"});
+ln.forEach(a=>so.observe(document.querySelector(a.hash)));
+const co=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;co.unobserve(e.target);const el=e.target,to=+el.dataset.to,sf=el.dataset.sf||"",t0=performance.now();
+const st=t=>{const k=Math.min((t-t0)/1100,1);el.textContent=Math.round(to*(1-Math.pow(1-k,3)))+sf;if(k<1)requestAnimationFrame(st)};requestAnimationFrame(st)}),{threshold:.6});
+if(!rm)document.querySelectorAll("[data-to]").forEach(e=>{e.textContent="0"+(e.dataset.sf||"");co.observe(e)});
+const P={ceo:["Visão completa da empresa",["Folha e indicadores de todos os departamentos","Aprovação de reajustes","Auditoria completa das alterações","Cadastro e inativação de colaboradores"]],ger:["Processos de RH",["Cadastro e inativação de colaboradores","Análise e decisão de solicitações","Indicadores e auditoria corporativa"]],fun:["Foco na própria equipe",["Consulta dos colaboradores subordinados","Abertura de solicitações de reajuste","Indicadores e histórico da equipe"]]};
+const tb=[...document.querySelectorAll("[role=tab]")];
+function pick(b){tb.forEach(x=>{x.setAttribute("aria-selected",x===b);x.tabIndex=x===b?0:-1});const[t,l]=P[b.dataset.k];$("pan").innerHTML=`<h3>${t}</h3><ul>${l.map(i=>`<li>${i}</li>`).join("")}</ul>`;$("pan").setAttribute("aria-labelledby",b.id)}
+tb.forEach((b,i)=>{b.onclick=()=>pick(b);b.onkeydown=e=>{const n={ArrowDown:1,ArrowRight:1,ArrowUp:-1,ArrowLeft:-1}[e.key];if(n){e.preventDefault();const t=tb[(i+n+tb.length)%tb.length];t.focus();pick(t)}}});
+pick(tb[0]);
+</script></body></html>

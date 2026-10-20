@@ -1,0 +1,20 @@
+import {api,query} from './api.js';
+import {$,boot,run,esc,money,date,options,pager,toast,confirm} from './shared.js';
+let user,page=1,selected;
+async function listar(){const data=await api('/Funcionario'+query({...Object.fromEntries(new FormData($('filtros'))),pagina:page}));
+$('rows').innerHTML=data.items.length?data.items.map(f=>`<tr><td><b>${esc(f.nome)}</b><div class="muted">${esc(f.cargo)}</div></td><td>${esc(f.departamento)}</td><td><span class="tag ${f.ativo?'approved':'rejected'}">${f.ativo?'Ativo':'Inativo'}</span></td><td class="num">${money(f.salario)}</td><td><button class="lnk" data-detail="${f.id}">Detalhes</button>${user.podeGerir&&f.ativo?` <button class="lnk" data-inactive="${f.id}">Inativar</button>`:''}</td></tr>`).join(''):'<tr><td colspan="5">Nenhum colaborador encontrado. Ajuste os filtros.</td></tr>';
+pager($('paginacao'),page,data.total,10,n=>run(async()=>{page=n;await listar();}));}
+$('filtros').onsubmit=e=>{e.preventDefault();page=1;run(listar);};
+document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>$(b.dataset.close).close());
+$('abrir').onclick=()=>$('cadastro').showModal();
+$('novo-form').onsubmit=async e=>{e.preventDefault();const button=e.submitter;button.disabled=true;$('cadastro-erro').textContent='';try{const values=Object.fromEntries(new FormData(e.target));values.salario=Number(values.salario);values.idGerente=values.idGerente||null;await api('/Funcionario',{method:'POST',body:values});$('cadastro').close();e.target.reset();await run(listar);toast('Colaborador cadastrado.');}catch(error){$('cadastro-erro').textContent=error.message;}finally{button.disabled=false;}};
+$('rows').onclick=e=>{const detail=e.target.closest('[data-detail]'),inactive=e.target.closest('[data-inactive]');if(detail)run(()=>detalhes(detail.dataset.detail));if(inactive)run(async()=>{if(await confirm('Inativar este colaborador? O histórico será preservado.','Inativar')){await api('/Funcionario/'+inactive.dataset.inactive,{method:'DELETE'});await listar();toast('Colaborador inativado.');}});};
+async function detalhes(id){selected=id;const data=await api('/Funcionario/'+id),f=data.funcionario;
+$('detalhe-nome').textContent=f.nome;$('detalhe-corpo').innerHTML=`<p>${esc(f.cargo)} · ${esc(f.departamento)} · ${money(f.salario)}</p><p>${esc(f.email)} · Gestor: ${esc(f.gerente||'—')}</p><h3>Histórico salarial</h3><ul class="hist">${data.historico.map(s=>`<li><span>${esc(s.dataInicio)}</span><span>${esc(s.motivoAlteracao||'Admissão')}</span><b>${money(s.valor)}</b></li>`).join('')||'<li>Sem histórico anterior.</li>'}</ul><h3>Movimentações recentes</h3><ul class="hist">${data.movimentacoes.map(a=>`<li><span>${date(a.dataHora)}</span><span>${esc(a.operacao)} · ${esc(a.responsavel)}</span></li>`).join('')||'<li>Sem movimentações.</li>'}</ul>`;
+$('editar-form').hidden=!user.podeGerir;$('editar-erro').textContent='';for(const [key,value] of Object.entries(f)){const field=$('editar-form').elements.namedItem(key);if(field)field.value=String(value);}
+if(!$('detalhes').open)$('detalhes').showModal();}
+$('editar-form').onsubmit=async e=>{e.preventDefault();e.submitter.disabled=true;try{const values=Object.fromEntries(new FormData(e.target));values.ativo=values.ativo==='true';values.idGerente=values.idGerente||null;await api('/Funcionario/'+selected,{method:'PATCH',body:values});$('detalhes').close();await run(listar);toast('Cadastro atualizado.');}catch(error){$('editar-erro').textContent=error.message;}finally{e.submitter.disabled=false;}};
+run(async()=>{user=await boot();const deps=await api('/Departamento');
+$('dep').insertAdjacentHTML('beforeend',options(deps));$('departamento').innerHTML=options(deps);$('ed-dep').innerHTML=options(deps);
+if(user.podeGerir){$('abrir').hidden=false;const perfis=await api('/Perfil');$('perfil').innerHTML=options(perfis.filter(p=>['Colaborador','Gestor'].includes(p.nome)));const gestores=await api('/Funcionario/Gerentes');$('gerente').insertAdjacentHTML('beforeend',options(gestores));$('ed-gerente').insertAdjacentHTML('beforeend',options(gestores));}
+await listar();if(location.hash==='#novo'&&user.podeGerir)$('cadastro').showModal();});

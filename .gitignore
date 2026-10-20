@@ -1,0 +1,15 @@
+**/bin/
+**/obj/
+.vs/
+.vscode/
+.env
+.env.*
+!.env.example
+*.user
+*.log
+node_modules/
+.local/
+TestResults/
+playwright-report/
+__pycache__/
+*.pyc
