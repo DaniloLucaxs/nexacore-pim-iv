@@ -2,6 +2,12 @@
 
 Evolução do PIM III para gestão de pessoas com .NET 8, EF Core, SQL Server e HTML/CSS/JavaScript. Mantém entidades, namespaces, migrations originais e identidade visual recebida. Não há integração externa de IA nesta fase.
 
+## Para instalar e apresentar
+
+- **[Instalação rápida para o grupo](docs/instalacao-rapida.md):** requisitos, clone, dependências e execução local no Windows, com PowerShell, .NET e SQL Server, sem Python/Docker.
+- **[Resumo da versão atual para o PIM](docs/resumo-pim-iv.md):** funcionalidades, regras, tecnologias, evidências e limites; IA identificada como evolução futura.
+- [Guia detalhado de suporte Windows](docs/execucao-local-windows.md) e [roteiro de apresentação](docs/roteiro-apresentacao.md).
+
 ## Começar no Windows com SQL Server instalado
 
 **Para os integrantes do grupo:** siga o [guia de execução local no Windows](docs/execucao-local-windows.md). Ele apresenta o caminho validado por Danilo, com C#/.NET 8 e SQL Server local, **sem Python ou Docker**, comandos separados para CMD e PowerShell, configuração da sua própria instância e soluções para os erros encontrados.
