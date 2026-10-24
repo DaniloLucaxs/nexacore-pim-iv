@@ -4,6 +4,8 @@ Evolução do PIM III para gestão de pessoas com .NET 8, EF Core, SQL Server e 
 
 ## Para instalar e apresentar
 
+- **[Baixar o guia em Word (.docx)](docs/Guia-Instalacao-NexaCore.docx):** duas páginas com links das ferramentas, configuração e execução local.
+
 - **[Instalação rápida para o grupo](docs/instalacao-rapida.md):** requisitos, clone, dependências e execução local no Windows, com PowerShell, .NET e SQL Server, sem Python/Docker.
 - **[Resumo da versão atual para o PIM](docs/resumo-pim-iv.md):** funcionalidades, regras, tecnologias, evidências e limites; IA identificada como evolução futura.
 - [Guia detalhado de suporte Windows](docs/execucao-local-windows.md) e [roteiro de apresentação](docs/roteiro-apresentacao.md).
